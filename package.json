@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "eth-crypto": "^2.0.0",
+    "package.json": "^2.0.1"
+  }
+}
