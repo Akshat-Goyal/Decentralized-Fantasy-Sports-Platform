@@ -25,6 +25,11 @@ contract FantasySports {
         PlayerStats stats;
     }
 
+    /**
+     * This struct holds all the information regarding fantasy team
+     * name is the fantasy team's name
+     * bid is the amount of money bid by the owner on the game
+     */
     struct FantasyTeam {
         address payable ownerId;
         string name;
@@ -42,6 +47,18 @@ contract FantasySports {
     uint256 RUN_MUL = 1;
     uint256 WICKET_MUL = 50;
 
+    /**
+     * This modifier is used by a function to check if the player is valid
+     * @param playerID is the unique ID of the player
+     */
+    modifier onlyValidPlayerID(uint256 playerID) {
+        require(playerID < players.length, "Player does not exist");
+        _;
+    }
+
+    /**
+     * Organiser calls this function to start the game
+     */
     function startGame() public {
         require(
             gameStatus == Status.NO_GAME_IN_PROGRESS,
@@ -53,6 +70,10 @@ contract FantasySports {
         gameStatus = Status.PRE_GAME_API;
     }
 
+    /**
+     * Organiser calls to add the players that will be playing the sport
+     * @param playerName is the name of the player
+     */
     function addPlayerToGame(string memory playerName) public {
         require(gameStatus == Status.PRE_GAME_API, "Can't add player now");
 
@@ -62,6 +83,10 @@ contract FantasySports {
         players.push(newPlayer);
     }
 
+    /**
+     * Returns the fantasy team id
+     * @param ownerId is the id of the owner who owns the fantasy team
+     */
     function getFantasyTeamID(address ownerId) private view returns (uint256) {
         for (uint256 i = 0; i < fantasyTeams.length; i++) {
             if (fantasyTeams[i].ownerId == ownerId) {
@@ -71,6 +96,11 @@ contract FantasySports {
         return fantasyTeams.length;
     }
 
+    /**
+     * Checks if player exists in the fantasy team
+     * @param playerID is the player id
+     * @param fantasyTeamID is the fantasy team id
+     */
     function existsPlayerIdInFantasyTeam(
         uint256 playerID,
         uint256 fantasyTeamID
@@ -84,11 +114,18 @@ contract FantasySports {
         return false;
     }
 
+    /**
+     * Called when all the players playing the sport is added
+     */
     function playersAddedToGame() public {
         require(gameStatus == Status.PRE_GAME_API, "Can't change status");
         gameStatus = Status.PRE_GAME_USER;
     }
 
+    /**
+     * Adds new fantasy team. Owner can own only one team
+     * @param teamName is the team name
+     */
     function addFantasyTeam(string memory teamName) public {
         require(
             gameStatus == Status.PRE_GAME_USER,
@@ -109,7 +146,13 @@ contract FantasySports {
         fantasyTeams.push(newTeam);
     }
 
-    function addPlayerToFantasyTeam(uint256 playerID) public {
+    /**
+     * Adds player to the fantasy team
+     * @param playerID is the player id
+     */
+    function addPlayerToFantasyTeam(uint256 playerID) public 
+    onlyValidPlayerID(playerID)
+    {
         require(
             gameStatus == Status.PRE_GAME_USER,
             "Players can't be added to fantasy team now"
@@ -120,7 +163,6 @@ contract FantasySports {
             fantasyTeamID != fantasyTeams.length,
             "Team does not exists for the user"
         );
-        require(playerID < players.length, "Player does not exists");
         require(
             !existsPlayerIdInFantasyTeam(playerID, fantasyTeamID),
             "Player already in the team"
@@ -133,7 +175,15 @@ contract FantasySports {
         fantasyTeams[fantasyTeamID].playerIds.push(playerID);
     }
 
-    function setCaptains(uint256 captainID, uint256 viceCaptainID) public {
+    /**
+     * Sets captain and vice captain of the fantasy team
+     * @param captainID is the captain id
+     * @param viceCaptainID is the vice captain id
+     */
+    function setCaptains(uint256 captainID, uint256 viceCaptainID) public 
+    onlyValidPlayerID(captainID)
+    onlyValidPlayerID(viceCaptainID)
+    {
         require(
             gameStatus == Status.PRE_GAME_USER,
             "Can't set captains for the fantasy team now"
@@ -144,8 +194,6 @@ contract FantasySports {
             fantasyTeamID != fantasyTeams.length,
             "Team does not exists for the user"
         );
-        require(captainID < players.length, "Player does not exist");
-        require(viceCaptainID < players.length, "Player does not exist");
         require(
             existsPlayerIdInFantasyTeam(captainID, fantasyTeamID),
             "Captain not added"
@@ -159,6 +207,9 @@ contract FantasySports {
         fantasyTeams[fantasyTeamID].viceCaptainId = viceCaptainID;
     }
 
+    /**
+     * Owners call to bid at the game
+     */
     function bid() public payable {
         require(gameStatus == Status.PRE_GAME_USER, "Bids can't be placed now");
 
@@ -174,28 +225,50 @@ contract FantasySports {
         fantasyTeams[fantasyTeamID].bid = msg.value;
     }
 
+    /**
+     * Game begins. No one can form more fantasy team.
+     */
     function gameBegins() public {
         require(gameStatus == Status.PRE_GAME_USER, "Can't change status");
         gameStatus = Status.GAME_BEGINS;
     }
 
+    /**
+     * Sets player's wickets, runs scored
+     * @param playerID is the player id
+     * @param runs scored by the player
+     * @param wickets taken by the player
+     */
     function setplayerStats(
         uint256 playerID,
         uint256 runs,
         uint256 wickets
-    ) public {
-        require(gameStatus == Status.GAME_BEGINS, "Can't set player's stats now");
-        require(playerID < players.length, "Player does not exists");
+    ) public 
+    onlyValidPlayerID(playerID)
+    {
+        require(
+            gameStatus == Status.GAME_BEGINS,
+            "Can't set player's stats now"
+        );
 
         players[playerID].stats.runs = runs;
         players[playerID].stats.wickets = wickets;
     }
 
+    /**
+     * Called after receiving all the players' stats
+     */
     function gameStops() public {
         require(gameStatus == Status.GAME_BEGINS, "Can't change status");
         gameStatus = Status.GAME_STOPS;
     }
 
+    /**
+     * Calculate player's score
+     * @param playerID is the player id
+     * @param isCaptain is true if player is captain
+     * @param isViceCaptain is true if player is vice captain
+     */
     function calculatePlayerScore(
         uint256 playerID,
         bool isCaptain,
@@ -218,7 +291,10 @@ contract FantasySports {
         return score;
     }
 
-    function distribiuteRwards() private {
+    /**
+     * Distributs rewards among the owners
+     */
+    function distributeRewards() private {
         uint256 sum = 0;
         uint256 totalBid = 0;
         for (uint256 i = 0; i < fantasyTeams.length; i++) {
@@ -233,6 +309,9 @@ contract FantasySports {
         }
     }
 
+    /**
+     * Calculates teams' score. Team's score is the sum of scores of team's players
+     */
     function calculateTeamsScore() public {
         require(gameStatus == Status.GAME_STOPS, "Game has not stopped");
 
@@ -246,7 +325,7 @@ contract FantasySports {
                 );
             }
         }
-        distribiuteRwards();
+        distributeRewards();
         gameStatus = Status.NO_GAME_IN_PROGRESS;
     }
 
@@ -315,8 +394,12 @@ contract FantasySports {
             playersList = string(
                 abi.encodePacked(playersList, uint2str(players[i].id))
             );
-            playersList = string(abi.encodePacked(playersList, "; Player Name: "));
-            playersList = string(abi.encodePacked(playersList, players[i].name));
+            playersList = string(
+                abi.encodePacked(playersList, "; Player Name: ")
+            );
+            playersList = string(
+                abi.encodePacked(playersList, players[i].name)
+            );
             playersList = string(abi.encodePacked(playersList, "\n"));
         }
         return playersList;
