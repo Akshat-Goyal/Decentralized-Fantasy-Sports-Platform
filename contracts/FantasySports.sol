@@ -58,8 +58,11 @@ contract FantasySports {
 
     /**
      * Organiser calls this function to start the game
+     * @param teamSize is the name of the player
+     * @param runMul is the name of the player
+     * @param wicketMul is the name of the player
      */
-    function startGame() public {
+    function startGame(uint256 teamSize, uint256 runMul, uint256 wicketMul) public {
         require(
             gameStatus == Status.NO_GAME_IN_PROGRESS,
             "Game already in progress"
@@ -68,6 +71,9 @@ contract FantasySports {
         delete players;
         delete fantasyTeams;
         gameStatus = Status.PRE_GAME_API;
+        TEAM_SIZE = teamSize;
+        RUN_MUL = runMul;
+        WICKET_MUL = wicketMul;
     }
 
     /**
@@ -302,9 +308,19 @@ contract FantasySports {
             totalBid += fantasyTeams[i].bid;
         }
         for (uint256 i = 0; i < fantasyTeams.length; i++) {
-            uint256 reward = (fantasyTeams[i].bid *
-                fantasyTeams[i].score *
-                totalBid) / sum;
+            
+            uint256 reward ;
+            if(sum==0)
+            {
+                reward = fantasyTeams[i].bid; 
+            }
+            else
+            {
+                reward = (fantasyTeams[i].bid *
+                    fantasyTeams[i].score *
+                    totalBid) / sum;
+
+            }
             fantasyTeams[i].ownerId.transfer(reward);
         }
     }

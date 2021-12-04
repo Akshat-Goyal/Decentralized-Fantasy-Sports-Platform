@@ -34,11 +34,27 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid comment-inner comment-enabled" data-hard-breaks="true" style=""><h1 id="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" data-id="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" style=""><a class="anchor hidden-xs" href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform"><span class="octicon octicon-link"></span></a><span>A decentralised and privacy-centric Fantasy Sports Platform</span></h1><h3 id="How-to-interact" data-id="How-to-interact" style=""><a class="anchor hidden-xs" href="#How-to-interact" title="How-to-interact"><span class="octicon octicon-link"></span></a><span>How to interact</span></h3><p><span>The following are some sample tests on how to use the smart contract. A lot of checking has been done everywhere to make sure that only the authorised users can execute key functions.</span></p><p><span>You need to have </span><a href="https://nodejs.org/en/download/package-manager/" target="_blank" rel="noopener"><span>NodeJS</span></a><span> and </span><a href="https://www.trufflesuite.com/docs/truffle/getting-started/installation" target="_blank" rel="noopener"><span>Truffle</span></a><span> installed. Instructions are present in the links attached.</span></p><h4 id="Required-Packages" data-id="Required-Packages" style=""><a class="anchor hidden-xs" href="#Required-Packages" title="Required-Packages"><span class="octicon octicon-link"></span></a><span>Required Packages</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">npm install package.json
-</code></pre><h4 id="Steps-to-Run" data-id="Steps-to-Run" style=""><a class="anchor hidden-xs" href="#Steps-to-Run" title="Steps-to-Run"><span class="octicon octicon-link"></span></a><span>Steps to Run</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">truffle develop
+    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true" style=""><h1 id="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" data-id="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" style=""><a class="anchor hidden-xs" href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A-decentralised-and-privacy-centric-Fantasy-Sports-Platform"><span class="octicon octicon-link"></span></a><span>A decentralised and privacy-centric Fantasy Sports Platform</span></h1><p><span>Existing fantasy sports players rely on a central fantasy sports platform such as Dream11 or MPL to play fantasy sports. We look to remove these central services which act as middlemen from this system with the help of a blockchain based service run by the players themselves, while maintaining popular features present in the central platforms.</span></p><h3 id="Scope-of-the-project" data-id="Scope-of-the-project" style=""><a class="anchor hidden-xs" href="#Scope-of-the-project" title="Scope-of-the-project"><span class="octicon octicon-link"></span></a><span>Scope of the project</span></h3><p><span>The smart contract can be deployed on etherium blockchain. It removes the need of Centralized Authority. If there is a central authority controlling the platform, they charge a commission on reward amount, using block chain we do away with any central authority and hence the participants can get the whole reward amount without deduction. Block chain makes the operations very transparent to ensure that there are no ill-practices or cheating going on. This transparency was not possible in the absence of blockchain.</span></p><p><span>The smart contract can be used at different scales, such as local games, or international level games such as IPL. This contract can handle users worldwide.</span></p><h3 id="General-Structure" data-id="General-Structure" style=""><a class="anchor hidden-xs" href="#General-Structure" title="General-Structure"><span class="octicon octicon-link"></span></a><span>General Structure</span></h3><p><span>We will be running the entire system on an Ethereum blockchain network, which will be maintained by the the participants. The players will decide their team before the game starts. The system will be updated about the team. When the game ends the collected reward amount will be distributed among the participants based in their team selection.</span></p><p><span>The flow of the app will be as follows-</span></p><ul>
+<li><span>The people will bet on the cricket matches like it is done in Dream 11.</span></li>
+<li><span>Smart contract will receive the live data of each ball played by cricketers.</span></li>
+<li><span>Smart contract will decide who wins the bet and regulate the transaction.</span></li>
+</ul><p><a href="https://imgbb.com/" target="_blank" rel="noopener"><img src="https://i.ibb.co/2spfYhH/Screenshot-from-2021-12-04-12-16-44.png" alt="Screenshot-from-2021-12-04-12-16-44"></a></p><h3 id="Implementation-Details" data-id="Implementation-Details" style=""><a class="anchor hidden-xs" href="#Implementation-Details" title="Implementation-Details"><span class="octicon octicon-link"></span></a><span>Implementation Details</span></h3><h4 id="Start-Game" data-id="Start-Game" style=""><a class="anchor hidden-xs" href="#Start-Game" title="Start-Game"><span class="octicon octicon-link"></span></a><span>Start Game</span></h4><p><span>To begin a new game this function is called. In game variables like Team size, and points corresponding to runs and wickets are initialized.</span></p><pre><code>function startGame(uint256 teamSize, uint256 runMul, uint256 wicketMul) 
+</code></pre><h4 id="Add-Players-To-The-Game" data-id="Add-Players-To-The-Game" style=""><a class="anchor hidden-xs" href="#Add-Players-To-The-Game" title="Add-Players-To-The-Game"><span class="octicon octicon-link"></span></a><span>Add Players To The Game</span></h4><p><span>Players who are going to play in the game are added. The owners can choose from these players for their fantasy team.</span></p><pre><code>addPlayerToGame(string memory playerName)
+</code></pre><h4 id="List-Players" data-id="List-Players" style=""><a class="anchor hidden-xs" href="#List-Players" title="List-Players"><span class="octicon octicon-link"></span></a><span>List Players</span></h4><p><span>The owners can view the details of the listed player using this function and then create their team.</span></p><pre><code>listPlayers()
+</code></pre><h4 id="Players-Added" data-id="Players-Added" style=""><a class="anchor hidden-xs" href="#Players-Added" title="Players-Added"><span class="octicon octicon-link"></span></a><span>Players Added</span></h4><p><span>Once all players are added this function is called to notify that the owners can now start forming their teams.</span></p><pre><code>playersAddedToGame()
+</code></pre><h4 id="Add-Fantasy-Team" data-id="Add-Fantasy-Team" style=""><a class="anchor hidden-xs" href="#Add-Fantasy-Team" title="Add-Fantasy-Team"><span class="octicon octicon-link"></span></a><span>Add Fantasy Team</span></h4><p><span>Owners who want to play in the fantasy game can form their own team. One owner can only form one team for the game.</span></p><pre><code>addFantasyTeam(string memory teamName)
+</code></pre><h4 id="Add-Players-To-Fantasy-Team" data-id="Add-Players-To-Fantasy-Team" style=""><a class="anchor hidden-xs" href="#Add-Players-To-Fantasy-Team" title="Add-Players-To-Fantasy-Team"><span class="octicon octicon-link"></span></a><span>Add Players To Fantasy Team</span></h4><p><span>Once the fantasy team is formed the owner can add players to their team. The player ID is passed as an argument.</span></p><pre><code>addPlayerToFantasyTeam(uint256 playerID)
+</code></pre><h4 id="Set-Captain" data-id="Set-Captain" style=""><a class="anchor hidden-xs" href="#Set-Captain" title="Set-Captain"><span class="octicon octicon-link"></span></a><span>Set Captain</span></h4><p><span>Once the fantasy team is formed the owner can assign players to be captain and vice captain.The player ID of captain and vice captain is passed as an argument.</span></p><pre><code>setCaptains(uint256 captainID, uint256 viceCaptainID)
+</code></pre><h4 id="Place-Bid" data-id="Place-Bid" style=""><a class="anchor hidden-xs" href="#Place-Bid" title="Place-Bid"><span class="octicon octicon-link"></span></a><span>Place Bid</span></h4><p><span>After formin the teams owners can start bidding. The reward for the woner will be proportionate to their placed bid and the score of the team.</span></p><pre><code>bid() 
+</code></pre><h4 id="Begin-game" data-id="Begin-game"><a class="anchor hidden-xs" href="#Begin-game" title="Begin-game"><span class="octicon octicon-link"></span></a><span>Begin game</span></h4><p><span>When this is called the team formation and bidding stops and the actual game begins.</span></p><pre><code>gameBegins()
+</code></pre><h4 id="Player-Stats" data-id="Player-Stats"><a class="anchor hidden-xs" href="#Player-Stats" title="Player-Stats"><span class="octicon octicon-link"></span></a><span>Player Stats</span></h4><p><span>The stats for each player is updated using the API. This function is called for each player ID and there performance stats are passed as arguments.</span></p><pre><code>setplayerStats(uint256 playerID, uint256 runs, uint256 wickets)
+</code></pre><h4 id="Stop-Game" data-id="Stop-Game"><a class="anchor hidden-xs" href="#Stop-Game" title="Stop-Game"><span class="octicon octicon-link"></span></a><span>Stop Game</span></h4><p><span>Once stats of all players are updated the game is stopped using this function.</span></p><pre><code> gameStops()
+</code></pre><h4 id="Calculate-Score-And-Distribute-Reward" data-id="Calculate-Score-And-Distribute-Reward"><a class="anchor hidden-xs" href="#Calculate-Score-And-Distribute-Reward" title="Calculate-Score-And-Distribute-Reward"><span class="octicon octicon-link"></span></a><span>Calculate Score And Distribute Reward</span></h4><p><span>After the game ends. Score for each fantasy team is calculated based on performance of players in the team. Each team owner then recieves a reward amount proportionate to the team score and the submitted bid.</span></p><pre><code>calculateTeamsScore()
+</code></pre><h3 id="How-To-Interact" data-id="How-To-Interact"><a class="anchor hidden-xs" href="#How-To-Interact" title="How-To-Interact"><span class="octicon octicon-link"></span></a><span>How To Interact</span></h3><p><span>The following are some sample tests on how to use the smart contract. A lot of checking has been done everywhere to make sure that only the authorised users can execute key functions.</span></p><p><span>You need to have </span><a href="https://nodejs.org/en/download/package-manager/" target="_blank" rel="noopener"><span>NodeJS</span></a><span> and </span><a href="https://www.trufflesuite.com/docs/truffle/getting-started/installation" target="_blank" rel="noopener"><span>Truffle</span></a><span> installed. Instructions are present in the links attached.</span></p><h4 id="Required-Packages" data-id="Required-Packages"><a class="anchor hidden-xs" href="#Required-Packages" title="Required-Packages"><span class="octicon octicon-link"></span></a><span>Required Packages</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">npm install package.json
+</code></pre><h4 id="Steps-to-Run" data-id="Steps-to-Run"><a class="anchor hidden-xs" href="#Steps-to-Run" title="Steps-to-Run"><span class="octicon octicon-link"></span></a><span>Steps to Run</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">truffle develop
 </code></pre><p><span>In the truffle console,</span></p><pre><code class="javascript hljs">deploy
 <span class="token keyword">let</span> instance <span class="token operator">=</span> <span class="token keyword">await</span> FantasySports<span class="token punctuation">.</span><span class="token function">deployed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre><p><span>After creating the instance, you can interact with the smart contract by calling the available functions.</span></p><h4 id="Test-1" data-id="Test-1" style=""><a class="anchor hidden-xs" href="#Test-1" title="Test-1"><span class="octicon octicon-link"></span></a><span>Test 1</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">truffle develop
+</code></pre><p><span>After creating the instance, you can interact with the smart contract by calling the available functions.</span></p><h4 id="Test-1" data-id="Test-1"><a class="anchor hidden-xs" href="#Test-1" title="Test-1"><span class="octicon octicon-link"></span></a><span>Test 1</span></h4><p><span>On the terminal, type</span></p><pre><code class="bash hljs">truffle develop
 </code></pre><p><span>In the truffle console,</span></p><pre><code class="javascript hljs">deploy
 <span class="token keyword">let</span> instance <span class="token operator">=</span> <span class="token keyword">await</span> FantasySports<span class="token punctuation">.</span><span class="token function">deployed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 instance<span class="token punctuation">.</span><span class="token function">startGame</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -131,13 +147,30 @@ instance<span class="token punctuation">.</span><span class="token function">add
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li><a href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A decentralised and privacy-centric Fantasy Sports Platform">A decentralised and privacy-centric Fantasy Sports Platform</a><ul class="nav">
-<li><a href="#How-to-interact" title="How to interact">How to interact</a><ul class="nav">
+<li class=""><a href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A decentralised and privacy-centric Fantasy Sports Platform">A decentralised and privacy-centric Fantasy Sports Platform</a><ul class="nav">
+<li><a href="#Scope-of-the-project" title="Scope of the project">Scope of the project</a></li>
+<li><a href="#General-Structure" title="General Structure">General Structure</a></li>
+<li><a href="#Implementation-Details" title="Implementation Details">Implementation Details</a><ul class="nav">
+<li><a href="#Start-Game" title="Start Game">Start Game</a></li>
+<li><a href="#Add-Players-To-The-Game" title="Add Players To The Game">Add Players To The Game</a></li>
+<li><a href="#List-Players" title="List Players">List Players</a></li>
+<li><a href="#Players-Added" title="Players Added">Players Added</a></li>
+<li><a href="#Add-Fantasy-Team" title="Add Fantasy Team">Add Fantasy Team</a></li>
+<li><a href="#Add-Players-To-Fantasy-Team" title="Add Players To Fantasy Team">Add Players To Fantasy Team</a></li>
+<li><a href="#Set-Captain" title="Set Captain">Set Captain</a></li>
+<li><a href="#Place-Bid" title="Place Bid">Place Bid</a></li>
+<li><a href="#Begin-game" title="Begin game">Begin game</a></li>
+<li><a href="#Player-Stats" title="Player Stats">Player Stats</a></li>
+<li><a href="#Stop-Game" title="Stop Game">Stop Game</a></li>
+<li><a href="#Calculate-Score-And-Distribute-Reward" title="Calculate Score And Distribute Reward">Calculate Score And Distribute Reward</a></li>
+</ul>
+</li>
+<li class=""><a href="#How-To-Interact" title="How To Interact">How To Interact</a><ul class="nav">
 <li><a href="#Required-Packages" title="Required Packages">Required Packages</a></li>
 <li><a href="#Steps-to-Run" title="Steps to Run">Steps to Run</a></li>
 <li><a href="#Test-1" title="Test 1">Test 1</a></li>
 <li><a href="#Test-2" title="Test 2">Test 2</a></li>
-<li><a href="#Test-3" title="Test 3">Test 3</a></li>
+<li class=""><a href="#Test-3" title="Test 3">Test 3</a></li>
 <li><a href="#Test-4" title="Test 4">Test 4</a></li>
 </ul>
 </li>
@@ -151,13 +184,30 @@ instance<span class="token punctuation">.</span><span class="token function">add
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
         <div class="toc"><ul class="nav">
-<li><a href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A decentralised and privacy-centric Fantasy Sports Platform">A decentralised and privacy-centric Fantasy Sports Platform</a><ul class="nav">
-<li><a href="#How-to-interact" title="How to interact">How to interact</a><ul class="nav">
+<li class=""><a href="#A-decentralised-and-privacy-centric-Fantasy-Sports-Platform" title="A decentralised and privacy-centric Fantasy Sports Platform">A decentralised and privacy-centric Fantasy Sports Platform</a><ul class="nav">
+<li><a href="#Scope-of-the-project" title="Scope of the project">Scope of the project</a></li>
+<li><a href="#General-Structure" title="General Structure">General Structure</a></li>
+<li><a href="#Implementation-Details" title="Implementation Details">Implementation Details</a><ul class="nav">
+<li><a href="#Start-Game" title="Start Game">Start Game</a></li>
+<li><a href="#Add-Players-To-The-Game" title="Add Players To The Game">Add Players To The Game</a></li>
+<li><a href="#List-Players" title="List Players">List Players</a></li>
+<li><a href="#Players-Added" title="Players Added">Players Added</a></li>
+<li><a href="#Add-Fantasy-Team" title="Add Fantasy Team">Add Fantasy Team</a></li>
+<li><a href="#Add-Players-To-Fantasy-Team" title="Add Players To Fantasy Team">Add Players To Fantasy Team</a></li>
+<li><a href="#Set-Captain" title="Set Captain">Set Captain</a></li>
+<li><a href="#Place-Bid" title="Place Bid">Place Bid</a></li>
+<li><a href="#Begin-game" title="Begin game">Begin game</a></li>
+<li><a href="#Player-Stats" title="Player Stats">Player Stats</a></li>
+<li><a href="#Stop-Game" title="Stop Game">Stop Game</a></li>
+<li><a href="#Calculate-Score-And-Distribute-Reward" title="Calculate Score And Distribute Reward">Calculate Score And Distribute Reward</a></li>
+</ul>
+</li>
+<li class=""><a href="#How-To-Interact" title="How To Interact">How To Interact</a><ul class="nav">
 <li><a href="#Required-Packages" title="Required Packages">Required Packages</a></li>
 <li><a href="#Steps-to-Run" title="Steps to Run">Steps to Run</a></li>
 <li><a href="#Test-1" title="Test 1">Test 1</a></li>
 <li><a href="#Test-2" title="Test 2">Test 2</a></li>
-<li><a href="#Test-3" title="Test 3">Test 3</a></li>
+<li class=""><a href="#Test-3" title="Test 3">Test 3</a></li>
 <li><a href="#Test-4" title="Test 4">Test 4</a></li>
 </ul>
 </li>

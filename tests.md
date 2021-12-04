@@ -1,8 +1,18 @@
-# Tests
+### How To Interact
 
-> The following are some sample tests. A lot of checking has been done everywhere to make sure that only the authorised users can execute key functions
 
-### Test 1
+The following are some sample tests on how to use the smart contract. A lot of checking has been done everywhere to make sure that only the authorised users can execute key functions.
+
+
+You need to have [NodeJS](https://nodejs.org/en/download/package-manager/) and [Truffle](https://www.trufflesuite.com/docs/truffle/getting-started/installation) installed. Instructions are present in the links attached.
+
+#### Required Packages
+
+On the terminal, type
+```bash
+npm install package.json
+```
+#### Steps to Run
 
 On the terminal, type
 ```bash
@@ -12,15 +22,11 @@ truffle develop
 In the truffle console,
 ```javascript
 deploy
-let instance = await AModernWay.deployed();
-instance.viewItems(); // should return an empty string
-instance.addNewItem("netflix", "1 netflix screen", 555555, {from: accounts[1]});
-instance.viewItems(); // should return the recently added Netflix Screen
+let instance = await FantasySports.deployed();
 ```
+After creating the instance, you can interact with the smart contract by calling the available functions.
 
-This is a very simple test to check if the basic add and view operations work.
-
-### Test 2
+#### Test 1
 
 On the terminal, type
 ```bash
@@ -30,58 +36,38 @@ truffle develop
 In the truffle console,
 ```javascript
 deploy
-let instance = await AModernWay.deployed();
-instance.viewItems(); // should return an empty string
-instance.addNewItem("netflix", "1 netflix screen", 555555, {from: accounts[1]});
-instance.addNewItem("hotstar", "hotstar premium", 11122222, {from: accounts[3]});
-instance.addNewItem("prime video", "amazon prime", 456, {from: accounts[6]});
-instance.viewItems(); // should return the three items that were added recently
-const EthCrypto = await require('eth-crypto');
-const identity = await EthCrypto.createIdentity();
-instance.buyItem(2, identity.publicKey, {from: accounts[8], value: 456});
-const identity2 = await EthCrypto.createIdentity();
-instance.buyItem(0, identity2.publicKey, {from: accounts[3], value: 555555});
-instance.viewItems(); // should only return the hotstar string which has not been bought by anyone
+let instance = await FantasySports.deployed();
+instance.startGame(2, 1, 50);
+instance.addPlayerToGame("Player1");
+instance.addPlayerToGame("Player2");
+instance.addPlayerToGame("Player3");
+instance.addPlayerToGame("Player4");
+instance.playersAddedToGame();
+instance.addFantasyTeam("Team1", {from: accounts[0]});
+instance.addFantasyTeam("Team2", {from: accounts[1]});
+instance.addPlayerToFantasyTeam(0, {from: accounts[0]});
+instance.addPlayerToFantasyTeam(1, {from: accounts[0]});
+instance.addPlayerToFantasyTeam(2, {from: accounts[1]});
+instance.addPlayerToFantasyTeam(3, {from: accounts[1]});
+instance.setCaptains(0, 1, {from: accounts[0]});
+instance.setCaptains(2, 3, {from: accounts[1]});
+instance.bid({from: accounts[0], value: 10000000000000000000});
+instance.bid({from: accounts[1], value: 10000000000000000000});
+instance.gameBegins();
+instance.setplayerStats(0, 10, 20);
+instance.setplayerStats(1, 1, 2);
+instance.setplayerStats(2, 1, 2);
+instance.setplayerStats(3, 1, 2);
+instance.gameStops();
+instance.calculateTeamsScore();
+web3.eth.getBalance(accounts[0]);
+web3.eth.getBalance(accounts[1]);
 ```
 
-We had 3 items available for sale and two of them have been bought by different buyers.
+This is a very simple test to check if the basic add and view operations work and one can observe that correct reward amount is bieng transferred to the owners.
 
-```javascript
-let publicKey = await instance.getPublicKey(2, {from: accounts[6]});
-let primeString = "This is Amazon Prime Video";
-let encStr = await EthCrypto.encryptWithPublicKey(publicKey, primeString);
-let encryptedString = await JSON.stringify(encStr);
-instance.deliverItem(2, encryptedString, {from: accounts[6]});
-let buyerString = await instance.getItem(2, {from: accounts[8]});
-let parsedString = await JSON.parse(buyerString);
-let decStr = await EthCrypto.decryptWithPrivateKey(identity.privateKey, parsedString);
 
-decStr
-```
-
-decStr will return **'This is Amazon Prime Video'**. This is how we are maintaing secrecy. The seller will encrypt the item string with the buyer's public key and send the encrypted string to the buyer. Then the buyer will decrypt the encrypted string using their private key to get the secret item string back.
-
-> Now let's do the same for the buyer who bought the Netflix Screen!
-
-```javascript
-let publicKey2 = await instance.getPublicKey(0, {from: accounts[1]});
-let netflixString = "This is Netflix";
-let encStr2 = await EthCrypto.encryptWithPublicKey(publicKey2, netflixString);
-let encryptedString2 = await JSON.stringify(encStr2);
-instance.deliverItem(0, encryptedString2, {from: accounts[1]});
-let buyerString2 = await instance.getItem(0, {from: accounts[3]});
-let parsedString2 = await JSON.parse(buyerString2);
-let decStr2 = await EthCrypto.decryptWithPrivateKey(identity2.privateKey, parsedString2);
-
-decStr2
-```
-
-decStr will return **'This is Netflix'**.
-
-> Now let's do some tests where we should get errors!
-
-### Test 3
-
+#### Test 2
 
 On the terminal, type
 ```bash
@@ -91,21 +77,38 @@ truffle develop
 In the truffle console,
 ```javascript
 deploy
-let instance = await AModernWay.deployed();
-instance.viewItems(); // should return an empty string
-instance.addNewItem("netflix", "1 netflix screen", 555555, {from: accounts[1]});
-instance.viewItems(); // should return the recently added Netflix Screen
-const EthCrypto = await require('eth-crypto');
-const identity = await EthCrypto.createIdentity();
-instance.buyItem(1, identity.publicKey, {from: accounts[3], value: 555555});
+let instance = await FantasySports.deployed();
+instance.startGame(2, 1, 50);
+instance.addPlayerToGame("Player1");
+instance.addPlayerToGame("Player2");
+instance.addPlayerToGame("Player3");
+instance.addPlayerToGame("Player4");
+instance.playersAddedToGame();
+instance.addFantasyTeam("Team1", {from: accounts[0]});
+instance.addFantasyTeam("Team2", {from: accounts[1]});
+instance.addPlayerToFantasyTeam(0, {from: accounts[0]});
+instance.addPlayerToFantasyTeam(1, {from: accounts[0]});
+instance.addPlayerToFantasyTeam(2, {from: accounts[1]});
+instance.addPlayerToFantasyTeam(3, {from: accounts[1]});
+instance.setCaptains(0, 1, {from: accounts[0]});
+instance.setCaptains(2, 3, {from: accounts[1]});
+instance.bid({from: accounts[0], value: 10000000000000000000});
+instance.bid({from: accounts[1], value: 10000000000000000000});
+instance.gameBegins();
+instance.setplayerStats(0, 0, 0);
+instance.setplayerStats(1, 0, 0);
+instance.setplayerStats(2, 0, 0);
+instance.setplayerStats(3, 0, 0);
+instance.gameStops();
+instance.calculateTeamsScore();
+web3.eth.getBalance(accounts[0]);
+web3.eth.getBalance(accounts[1]);
 ```
 
-Boom, ERROR!!
+This is a test case where all the fantasy teams score 0 points. In such a case all the owners will be returned their bids. 
 
-This is where our require (assert) calls come handy. They checked that there is no item that has id = 1 and hence returned an error!
 
-### Test 4
-
+#### Test 3
 
 On the terminal, type
 ```bash
@@ -115,27 +118,26 @@ truffle develop
 In the truffle console,
 ```javascript
 deploy
-let instance = await AModernWay.deployed();
-instance.viewItems(); // should return an empty string
-instance.addNewItem("netflix", "1 netflix screen", 555555, {from: accounts[1]});
-instance.viewItems(); // should return the recently added Netflix Screen
-const EthCrypto = await require('eth-crypto');
-const identity = await EthCrypto.createIdentity();
-instance.buyItem(0, identity.publicKey, {from: accounts[3], value: 555555});
-let publicKey = await instance.getPublicKey(0, {from: accounts[1]});
-let netflixString = "This is Netflix";
-let encStr = await EthCrypto.encryptWithPublicKey(publicKey, netflixString);
-let encryptedString = await JSON.stringify(encStr);
-instance.deliverItem(0, encryptedString, {from: accounts[5]});
+let instance = await FantasySports.deployed();
+instance.startGame(2, 1, 50);
+instance.addPlayerToGame("Player1");
+instance.addPlayerToGame("Player2");
+instance.addPlayerToGame("Player3");
+instance.addPlayerToGame("Player4");
+instance.playersAddedToGame();
+instance.addFantasyTeam("Team1", {from: accounts[0]});
+instance.addFantasyTeam("Team2", {from: accounts[1]});
+instance.addPlayerToFantasyTeam(0, {from: accounts[0]});
+instance.bid({from: accounts[0], value: 10000000000000000000});
+
 ```
 
-Boom, ERROR!!
-
-This is where our modifiers come in handy! They checked that the user that is calling the deliverItem function for item 0 is not the actual seller of that item, and hence it popped up an error.
+In this testcase ann error will be thrown as the owner of Team1 can not bid as the team is still incomplete.
 
 
-### Test 5
 
+
+#### Test 4
 
 On the terminal, type
 ```bash
@@ -145,15 +147,25 @@ truffle develop
 In the truffle console,
 ```javascript
 deploy
-let instance = await AModernWay.deployed();
-instance.viewItems(); // should return an empty string
-instance.addNewItem("netflix", "1 netflix screen", 555555, {from: accounts[1]});
-instance.viewItems(); // should return the recently added Netflix Screen
-const EthCrypto = await require('eth-crypto');
-const identity = await EthCrypto.createIdentity();
-instance.buyItem(0, identity.publicKey, {from: accounts[3], value: 111111});
+let instance = await FantasySports.deployed();
+instance.startGame(2, 1, 50);
+instance.addPlayerToGame("Player1");
+instance.addPlayerToGame("Player2");
+instance.addPlayerToGame("Player3");
+instance.addPlayerToGame("Player4");
+instance.playersAddedToGame();
+instance.addFantasyTeam("Team1", {from: accounts[0]});
+instance.addFantasyTeam("Team2", {from: accounts[0]});
 ```
 
-Boom, ERROR!!
 
-This is where our require (assert) calls come in handy! They checked that the buyer is not sending money that has been listed as the asking price and hence they will return an error.
+Again in this testcase an error will be thrown as one owner ofcan not own 2 teams.
+
+
+<hr/>
+
+### Team 1
+- Manish (2018101073)
+- Akshat Goyal (2018101075)
+- Tanish Lad (2018114005)
+
